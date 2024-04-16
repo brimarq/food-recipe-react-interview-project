@@ -9,6 +9,7 @@ export default function GlobalState({ children }) {
   const [loading, setLoading] = useState(false);
   const [recipeList, setRecipeList] = useState([]);
   const [recipeDetailsData, setRecipeDetailsData] = useState(null);
+  const [favoritesList, setFavoritesList] = useState([]);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -32,9 +33,25 @@ export default function GlobalState({ children }) {
       setLoading(false);
       setSearchParam("");
     }
-
-    console.log(loading, recipeList);
   }
+
+  function handleAddToFavorite(getCurrentItem) {
+    console.log(getCurrentItem);
+    let copyFavoritesList = [...favoritesList];
+    const index = copyFavoritesList.findIndex(
+      (item) => item.id === getCurrentItem.id
+    );
+
+    if (index === -1) {
+      copyFavoritesList.push(getCurrentItem);
+    } else {
+      copyFavoritesList.splice(getCurrentItem);
+    }
+
+    setFavoritesList(copyFavoritesList);
+  }
+
+  console.log(favoritesList, "favoritesList");
 
   return (
     <GlobalContext.Provider
@@ -46,6 +63,8 @@ export default function GlobalState({ children }) {
         handleSubmit,
         recipeDetailsData,
         setRecipeDetailsData,
+        handleAddToFavorite,
+        favoritesList,
       }}
     >
       {children}
